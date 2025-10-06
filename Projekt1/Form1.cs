@@ -58,9 +58,32 @@ namespace Projekt1{
         private void exit_Click(object sender, EventArgs e){
             Application.Exit();
         }
+        public void ertekTorol(){
+            vendegNeve.Text = "";
+            vendegIrsz.Text = "";
+            vendegUtca.Text = "";
+            vendegHazszam.Text = "";
+            vendegTel.Text = "";
+            naptar.SelectionStart = DateTime.Now;
+            naptar.SelectionEnd = DateTime.Now;
+            tolIg = "";
+        }
         private void foglal_Click(object sender, EventArgs e){
             MessageBox.Show("A foglalás sikeres!");
-            
+            /*using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=Vendeglo;Integrated Security=True")){
+                connection.Open();
+                string sql = "INSERT INTO Foglalasok (Nev, Irsz, Utca, Hazszam, Telefon, TolIg) VALUES (@Nev, @Irsz, @Utca, @Hazszam, @Telefon, @TolIg)";
+                using (SqlCommand command = new SqlCommand(sql, connection)){
+                    command.Parameters.AddWithValue("@Nev", vendegNeve.Text);
+                    command.Parameters.AddWithValue("@Irsz", vendegIrsz.Text);
+                    command.Parameters.AddWithValue("@Utca", vendegUtca.Text);
+                    command.Parameters.AddWithValue("@Hazszam", vendegHazszam.Text);
+                    command.Parameters.AddWithValue("@Telefon", vendegTel.Text);
+                    command.Parameters.AddWithValue("@TolIg", tolIg);
+                    command.ExecuteNonQuery();
+                }
+            }*/
+            ertekTorol();
         }
         private void vendegNeve_TextChanged(object sender, EventArgs e){
             joE();
