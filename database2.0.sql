@@ -1,11 +1,17 @@
-CREATE TABLE `szobak` (
+CREATE DATABASE IF NOT EXISTS projekt1
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_hungarian_ci;
+
+USE projekt1;
+
+CREATE TABLE IF NOT EXISTS `szobak` (
     `szobaAz` INT NOT NULL AUTO_INCREMENT,
     `agy` INT NOT NULL,
     `potagy` INT NOT NULL,
     PRIMARY KEY (`szobaAz`)
 );
 
-CREATE TABLE `vendegek` (
+CREATE TABLE IF NOT EXISTS `vendegek` (
     `vsorsz` INT NOT NULL AUTO_INCREMENT,
     `vnev` VARCHAR(255) NOT NULL,
     `irsz` VARCHAR(10) NOT NULL,
@@ -15,7 +21,7 @@ CREATE TABLE `vendegek` (
     PRIMARY KEY (`vsorsz`)
 );
 
-CREATE TABLE `foglalasok` (
+CREATE TABLE IF NOT EXISTS `foglalasok` (
     `fsorsz` INT NOT NULL AUTO_INCREMENT,
     `vendeg` INT NOT NULL,
     `szoba` INT NOT NULL,

@@ -1,16 +1,19 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 namespace Projekt1{
     public partial class Form1 : Form{
-        public Form1(){
+        public Form1()
+        {
             InitializeComponent();
             naptar.MaxSelectionCount = 100;
             naptar.MinDate = DateTime.Now;
@@ -25,6 +28,33 @@ namespace Projekt1{
             System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
             gp.AddEllipse(0, 0, exit.Width, exit.Height);
             exit.Region = new Region(gp);
+            string connectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
+            using (MySqlConnection connection = new MySqlConnection(connectionString)){
+                connection.Open();
+                string sql = File.ReadAllText("C:\\Users\\UtasiZalan\\Documents\\GitHub\\foglalasProjekt\\database2.0.sql"); 
+                using (MySqlCommand command = new MySqlCommand(sql, connection)){
+                    command.ExecuteNonQuery(); 
+                }
+            }
+            connectionString = "Server=localhost;Database=Projekt1;User ID=root;Password=mysql;";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string clearSql = @"
+                                    SET FOREIGN_KEY_CHECKS = 0;
+                                    TRUNCATE TABLE foglalasok;
+                                    TRUNCATE TABLE vendegek;
+                                    TRUNCATE TABLE szobak;
+                                    SET FOREIGN_KEY_CHECKS = 1;
+                                ";
+                using (MySqlCommand clearCommand = new MySqlCommand(clearSql, connection)){
+                    clearCommand.ExecuteNonQuery();
+                }
+                string sql = File.ReadAllText(@"C:\Users\UtasiZalan\Documents\GitHub\foglalasProjekt\kezdoFoglalasok.sql");
+                using (MySqlCommand command = new MySqlCommand(sql, connection)){
+                    command.ExecuteNonQuery();
+                }
+            }
         }
         public void joE(){
             if (vendegNeve.Text != null && vendegUtca.Text != null && vendegTel.Text != null && int.TryParse(vendegIrsz.Text, out int a) && int.TryParse(vendegHazszam.Text, out int b) && tolIg != ""){
@@ -57,6 +87,7 @@ namespace Projekt1{
         }
         private void exit_Click(object sender, EventArgs e){
             Application.Exit();
+            
         }
         public void ertekTorol(){
             vendegNeve.Text = "";
@@ -70,19 +101,20 @@ namespace Projekt1{
         }
         private void foglal_Click(object sender, EventArgs e){
             MessageBox.Show("A foglalás sikeres!");
-            /*using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=Vendeglo;Integrated Security=True")){
+            string connectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
+            using (MySqlConnection connection = new MySqlConnection(connectionString)){
                 connection.Open();
-                string sql = "INSERT INTO Foglalasok (Nev, Irsz, Utca, Hazszam, Telefon, TolIg) VALUES (@Nev, @Irsz, @Utca, @Hazszam, @Telefon, @TolIg)";
-                using (SqlCommand command = new SqlCommand(sql, connection)){
+                string sql = "INSERT INTO vendegek (vnev, irsz, utca, hazSz, telefonSz) " +
+                             "VALUES (@Nev, @Irsz, @Utca, @Hazszam, @Telefon)";
+                using (MySqlCommand command = new MySqlCommand(sql, connection)){
                     command.Parameters.AddWithValue("@Nev", vendegNeve.Text);
                     command.Parameters.AddWithValue("@Irsz", vendegIrsz.Text);
                     command.Parameters.AddWithValue("@Utca", vendegUtca.Text);
                     command.Parameters.AddWithValue("@Hazszam", vendegHazszam.Text);
                     command.Parameters.AddWithValue("@Telefon", vendegTel.Text);
-                    command.Parameters.AddWithValue("@TolIg", tolIg);
                     command.ExecuteNonQuery();
                 }
-            }*/
+            }
             ertekTorol();
         }
         private void vendegNeve_TextChanged(object sender, EventArgs e){

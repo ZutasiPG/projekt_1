@@ -217,7 +217,7 @@
             this.Controls.Add(this.naptar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Projekt1";
             this.ResumeLayout(false);
             this.PerformLayout();
 
