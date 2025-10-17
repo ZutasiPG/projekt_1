@@ -25,7 +25,11 @@ CREATE TABLE IF NOT EXISTS `vendegek` (
     `hazSz` VARCHAR(50) NOT NULL,
     `telefonSz` VARCHAR(50) NOT NULL,
     `aktivE` BOOLEAN NOT NULL DEFAULT TRUE,
-    PRIMARY KEY (`vsorsz`)
+    PRIMARY KEY (`vsorsz`),
+    CONSTRAINT `vendegek_irsz_foreign`
+        FOREIGN KEY (`irsz`) REFERENCES `iranyitoszamok` (`irsz`)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `foglalasok` (
@@ -46,9 +50,3 @@ CREATE TABLE IF NOT EXISTS `foglalasok` (
         FOREIGN KEY (`szoba`) REFERENCES `szobak` (`szobaAz`)
         ON DELETE CASCADE
 );
-
-ALTER TABLE `vendegek`
-ADD CONSTRAINT `vendegek_irsz_foreign`
-FOREIGN KEY (`irsz`) REFERENCES `iranyitoszamok` (`irsz`)
-ON DELETE RESTRICT
-ON UPDATE CASCADE;
