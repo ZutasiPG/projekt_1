@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS `iranyitoszamok` (
     `irsz_id` INT NOT NULL AUTO_INCREMENT,
     `irsz` VARCHAR(10) NOT NULL,
     `telepules` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`irsz_id`)
+    PRIMARY KEY (`irsz_id`),
+    INDEX `idx_irsz` (`irsz`) 
 );
 
 CREATE TABLE IF NOT EXISTS `vendegek` (
@@ -46,8 +47,10 @@ CREATE TABLE IF NOT EXISTS `foglalasok` (
     PRIMARY KEY (`fsorsz`),
     CONSTRAINT `foglalasok_vendeg_foreign`
         FOREIGN KEY (`vendeg`) REFERENCES `vendegek` (`vsorsz`)
-        ON DELETE CASCADE,
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
     CONSTRAINT `foglalasok_szoba_foreign`
         FOREIGN KEY (`szoba`) REFERENCES `szobak` (`szobaAz`)
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
 );
