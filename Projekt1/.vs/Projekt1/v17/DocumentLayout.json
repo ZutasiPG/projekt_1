@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|c:\\users\\zutasi\\documents\\github\\projekt_1\\projekt1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|c:\\users\\zutasi\\documents\\github\\projekt_1\\projekt1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F5F0D94-9D7C-4626-8FB2-620DC77FF5F5}|Projekt1.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,20 +30,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAJwAAAAAAAAAAAAtwMAAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAMwBwAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-03T15:28:07.022Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Form1.Designer.cs",
               "DocumentMoniker": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "Form1.Designer.cs",
@@ -51,18 +51,20 @@
               "RelativeToolTip": "Form1.Designer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T08:20:54.513Z"
+              "WhenOpened": "2025-10-17T08:20:54.513Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\Projekt1\\Form1.cs [Design]",
               "RelativeToolTip": "Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-03T15:14:43.46Z"
+              "WhenOpened": "2025-10-03T15:14:43.46Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }
