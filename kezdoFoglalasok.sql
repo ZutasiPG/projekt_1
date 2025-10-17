@@ -4,17 +4,17 @@ INSERT INTO szobak (agy, potagy) VALUES
 (2, 0), (1, 1), (3, 1), (2, 2), (1, 0);
 
 -- Vendégek
-INSERT INTO vendegek (vnev, telepules, utca, hazSz, telefonSz) VALUES
-('Kovács Péter', 'Budapest', 'Fő utca', '12', '06301234567'),
-('Nagy Anna', 'Debrecen', 'Kossuth Lajos utca', '45', '06302223333'),
-('Szabó László', 'Szeged', 'Petőfi Sándor utca', '6B', '06303334444'),
-('Tóth Mária', 'Pécs', 'Arany János utca', '78', '06304445555'),
-('Varga Gábor', 'Győr', 'Széchenyi tér', '9', '06305556666'),
-('Balogh Zsuzsa', 'Miskolc', 'Bartók Béla út', '101', '06306667777'),
-('Farkas Dénes', 'Veszprém', 'Ady Endre utca', '23', '06307778888'),
-('Molnár Eszter', 'Eger', 'Bajcsy-Zsilinszky utca', '50', '06308889999'),
-('Kiss Zoltán', 'Szolnok', 'Rákóczi út', '1A', '06309990000'),
-('Horváth Krisztina', 'Kecskemét', 'Dózsa György út', '33', '06300001111');
+INSERT INTO vendegek (vnev, telepules, koztNeve, koztTipusa, hazSz, telefonSz, hanyFo, aktivE) VALUES
+('Kovács Péter', 'Budapest', 'Fő', 'utca', '12', '06301234567', 1, TRUE),
+('Nagy Anna', 'Debrecen', 'Kossuth Lajos', 'utca', '45', '06302223333', 1, TRUE),
+('Szabó László', 'Szeged', 'Petőfi Sándor', 'utca', '6B', '06303334444', 1, TRUE),
+('Tóth Mária', 'Pécs', 'Arany János', 'utca', '78', '06304445555', 1, TRUE),
+('Varga Gábor', 'Győr', 'Széchenyi', 'tér', '9', '06305556666', 1, TRUE),
+('Balogh Zsuzsa', 'Miskolc', 'Bartók Béla', 'út', '101', '06306667777', 1, TRUE),
+('Farkas Dénes', 'Veszprém', 'Ady Endre', 'utca', '23', '06307778888', 1, TRUE),
+('Molnár Eszter', 'Eger', 'Bajcsy-Zsilinszky', 'utca', '50', '06308889999', 1, TRUE),
+('Kiss Zoltán', 'Szolnok', 'Rákóczi', 'út', '1A', '06309990000', 1, TRUE),
+('Horváth Krisztina', 'Kecskemét', 'Dózsa György', 'út', '33', '06300001111', 1, TRUE);
 
 -- Foglalások
 INSERT INTO foglalasok (vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve) VALUES
