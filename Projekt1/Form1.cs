@@ -3,24 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http;
+using System.IO;
 
 namespace Projekt1
 {
     public partial class Form1 : Form
     {
-        private const string DatabaseSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/refs/heads/main/database.sql?token=GHSAT0AAAAAADMNT2LLOYS56UUAKJ4R3YXK2HSL3TQ";
-        private const string KezdoFoglalasokSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/refs/heads/main/kezdoFoglalasok.sql?token=GHSAT0AAAAAADMNT2LLBHMZKCVMJRJU3N6U2HSL4BA";
-
-        public static bool bad = false;
-
+        private const string DatabaseSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/database.sql";
+        private const string KezdoFoglalasokSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/kezdoFoglalasok.sql";
         public Form1()
         {
             InitializeComponent();
@@ -37,7 +33,6 @@ namespace Projekt1
             System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
             gp.AddEllipse(0, 0, exit.Width, exit.Height);
             exit.Region = new Region(gp);
-
             Task.Run(() => InitializeDatabaseFromWeb()).Wait();
         }
 
@@ -45,32 +40,34 @@ namespace Projekt1
         {
             try
             {
-                string connectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
+                string masterConnectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
+                string dataConnectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
                 string databaseSql;
+                string kezdoFoglalasokSql;
 
                 using (HttpClient client = new HttpClient())
                 {
                     databaseSql = await client.GetStringAsync(DatabaseSqlUrl);
+                    kezdoFoglalasokSql = await client.GetStringAsync(KezdoFoglalasokSqlUrl);
                 }
 
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection masterConnection = new MySqlConnection(masterConnectionString))
                 {
-                    await connection.OpenAsync();
-                    using (MySqlCommand command = new MySqlCommand(databaseSql, connection))
+                    await masterConnection.OpenAsync();
+
+                    string dropSql = "DROP DATABASE IF EXISTS projekt1;";
+                    using (MySqlCommand dropCommand = new MySqlCommand(dropSql, masterConnection))
+                    {
+                        await dropCommand.ExecuteNonQueryAsync();
+                    }
+
+                    using (MySqlCommand command = new MySqlCommand(databaseSql, masterConnection))
                     {
                         await command.ExecuteNonQueryAsync();
                     }
                 }
 
-                connectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
-                string kezdoFoglalasokSql;
-
-                using (HttpClient client = new HttpClient())
-                {
-                    kezdoFoglalasokSql = await client.GetStringAsync(KezdoFoglalasokSqlUrl);
-                }
-
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(dataConnectionString))
                 {
                     await connection.OpenAsync();
 
