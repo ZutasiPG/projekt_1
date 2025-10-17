@@ -95,13 +95,13 @@ namespace Projekt1
 
                     string setupScript = "DROP DATABASE IF EXISTS projekt1; CREATE DATABASE IF NOT EXISTS projekt1;";
                     await ExecuteSqlScript(setupScript, masterConnection);
-
-                    await ExecuteSqlScript(databaseSql, masterConnection);
                 }
 
                 using (MySqlConnection connection = new MySqlConnection(dataConnectionString))
                 {
                     await connection.OpenAsync();
+
+                    await ExecuteSqlScript(databaseSql, connection);
 
                     string clearSql = @"
                                     SET FOREIGN_KEY_CHECKS = 0;
@@ -113,7 +113,8 @@ namespace Projekt1
                                 ";
                     await ExecuteSqlScript(clearSql, connection);
 
-                    await ExecuteSqlScript(iranyitoSzamokSqlContent, connection);
+                    string iranyitoSzamokIgnoreSql = iranyitoSzamokSqlContent.Replace("INSERT INTO", "INSERT IGNORE INTO");
+                    await ExecuteSqlScript(iranyitoSzamokIgnoreSql, connection);
 
                     await ExecuteSqlScript(kezdoFoglalasokSqlContent, connection);
                 }
