@@ -12,9 +12,10 @@ CREATE TABLE IF NOT EXISTS `szobak` (
 );
 
 CREATE TABLE IF NOT EXISTS `iranyitoszamok` (
+    `irsz_id` INT NOT NULL AUTO_INCREMENT,
     `irsz` VARCHAR(10) NOT NULL,
     `telepules` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`irsz`)
+    PRIMARY KEY (`irsz_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `vendegek` (

@@ -23,7 +23,9 @@ namespace Projekt1
 
         public Form1()
         {
-            if (Task.Run(() => InitializeDatabaseFromWeb()).Result)
+            bool initializationSuccess = Task.Run(() => InitializeDatabaseFromWeb()).Result;
+
+            if (initializationSuccess)
             {
                 InitializeComponent();
                 naptar.MaxSelectionCount = 100;
@@ -34,16 +36,39 @@ namespace Projekt1
                 exit.FlatAppearance.BorderSize = 0;
                 exit.BackColor = Color.Transparent;
                 exit.Text = "";
-                exit.BackgroundImage = Image.FromFile("switch.png");
-                exit.BackgroundImageLayout = ImageLayout.Zoom;
-                System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
-                gp.AddEllipse(0, 0, exit.Width, exit.Height);
-                exit.Region = new Region(gp);
+                try
+                {
+                    exit.BackgroundImage = Image.FromFile("switch.png");
+                    exit.BackgroundImageLayout = ImageLayout.Zoom;
+                    System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
+                    gp.AddEllipse(0, 0, exit.Width, exit.Height);
+                    exit.Region = new Region(gp);
+                }
+                catch (FileNotFoundException)
+                {
+                }
             }
             else
             {
                 bad = true;
-                Application.Exit(); // Alkalmazás bezárása hiba esetén
+                Application.Exit();
+            }
+        }
+
+        private async Task ExecuteSqlScript(string sqlScript, MySqlConnection connection)
+        {
+            string[] commands = sqlScript.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var commandText in commands)
+            {
+                string trimmedCommand = commandText.Trim();
+                if (!string.IsNullOrWhiteSpace(trimmedCommand))
+                {
+                    using (MySqlCommand command = new MySqlCommand(trimmedCommand, connection))
+                    {
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
             }
         }
 
@@ -68,16 +93,10 @@ namespace Projekt1
                 {
                     await masterConnection.OpenAsync();
 
-                    string dropSql = "DROP DATABASE IF EXISTS projekt1; CREATE DATABASE IF NOT EXISTS projekt1;"; // biztos létrehozás
-                    using (MySqlCommand dropCommand = new MySqlCommand(dropSql, masterConnection))
-                    {
-                        await dropCommand.ExecuteNonQueryAsync();
-                    }
+                    string setupScript = "DROP DATABASE IF EXISTS projekt1; CREATE DATABASE IF NOT EXISTS projekt1;";
+                    await ExecuteSqlScript(setupScript, masterConnection);
 
-                    using (MySqlCommand command = new MySqlCommand(databaseSql, masterConnection))
-                    {
-                        await command.ExecuteNonQueryAsync();
-                    }
+                    await ExecuteSqlScript(databaseSql, masterConnection);
                 }
 
                 using (MySqlConnection connection = new MySqlConnection(dataConnectionString))
@@ -92,30 +111,17 @@ namespace Projekt1
                                     TRUNCATE TABLE iranyitoszamok;
                                     SET FOREIGN_KEY_CHECKS = 1;
                                 ";
-                    using (MySqlCommand clearCommand = new MySqlCommand(clearSql, connection))
-                    {
-                        await clearCommand.ExecuteNonQueryAsync();
-                    }
+                    await ExecuteSqlScript(clearSql, connection);
 
-                    // HELEYES SORREND: ELŐSZÖR AZ IRÁNYÍTÓSZÁMOK (Parent) BESZÚRÁSA!
-                    using (MySqlCommand irszCommand = new MySqlCommand(iranyitoSzamokSqlContent, connection))
-                    {
-                        // A MySqlCommand automatikusan elválasztja a pontosvesszővel elválasztott parancsokat.
-                        // Ha a hiba ismétlődik, manuális szétbontásra lesz szükség.
-                        await irszCommand.ExecuteNonQueryAsync();
-                    }
+                    await ExecuteSqlScript(iranyitoSzamokSqlContent, connection);
 
-                    // MÁSODSZOR A VENDÉGEK/FOGLALÁSOK (Child) BESZÚRÁSA
-                    using (MySqlCommand command = new MySqlCommand(kezdoFoglalasokSqlContent, connection))
-                    {
-                        await command.ExecuteNonQueryAsync();
-                    }
+                    await ExecuteSqlScript(kezdoFoglalasokSqlContent, connection);
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hiba az adatbázis inicializálásakor! Az adatbázis nem elérhető vagy a szkript letöltése sikertelen." + Environment.NewLine + ex.Message);
+                MessageBox.Show("Hiba az adatbázis inicializálásakor! Kérjük, ellenőrizze a MySQL szerver futását, vagy az internetkapcsolatot (URL-ek elérhetőségét)." + Environment.NewLine + "Részletes hiba: " + ex.Message);
                 return false;
             }
         }
