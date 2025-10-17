@@ -17,45 +17,58 @@ namespace Projekt1
     {
         private const string DatabaseSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/database.sql";
         private const string KezdoFoglalasokSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/kezdoFoglalasok.sql";
+        private const string iranyitoSzamokSql = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/addIrsz.sql";
+
+        public static bool bad = false;
+
         public Form1()
         {
-            InitializeComponent();
-            naptar.MaxSelectionCount = 100;
-            naptar.MinDate = DateTime.Now;
-            exit.Width = 39;
-            exit.Height = 39;
-            exit.FlatStyle = FlatStyle.Flat;
-            exit.FlatAppearance.BorderSize = 0;
-            exit.BackColor = Color.Transparent;
-            exit.Text = "";
-            exit.BackgroundImage = Image.FromFile("switch.png");
-            exit.BackgroundImageLayout = ImageLayout.Zoom;
-            System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
-            gp.AddEllipse(0, 0, exit.Width, exit.Height);
-            exit.Region = new Region(gp);
-            Task.Run(() => InitializeDatabaseFromWeb()).Wait();
+            if (Task.Run(() => InitializeDatabaseFromWeb()).Result)
+            {
+                InitializeComponent();
+                naptar.MaxSelectionCount = 100;
+                naptar.MinDate = DateTime.Now;
+                exit.Width = 39;
+                exit.Height = 39;
+                exit.FlatStyle = FlatStyle.Flat;
+                exit.FlatAppearance.BorderSize = 0;
+                exit.BackColor = Color.Transparent;
+                exit.Text = "";
+                exit.BackgroundImage = Image.FromFile("switch.png");
+                exit.BackgroundImageLayout = ImageLayout.Zoom;
+                System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
+                gp.AddEllipse(0, 0, exit.Width, exit.Height);
+                exit.Region = new Region(gp);
+            }
+            else
+            {
+                bad = true;
+                Application.Exit(); // Alkalmazás bezárása hiba esetén
+            }
         }
 
-        private async Task InitializeDatabaseFromWeb()
+        private async Task<bool> InitializeDatabaseFromWeb()
         {
             try
             {
                 string masterConnectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
                 string dataConnectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
                 string databaseSql;
-                string kezdoFoglalasokSql;
+                string kezdoFoglalasokSqlContent;
+                string iranyitoSzamokSqlContent;
 
                 using (HttpClient client = new HttpClient())
                 {
                     databaseSql = await client.GetStringAsync(DatabaseSqlUrl);
-                    kezdoFoglalasokSql = await client.GetStringAsync(KezdoFoglalasokSqlUrl);
+                    kezdoFoglalasokSqlContent = await client.GetStringAsync(KezdoFoglalasokSqlUrl);
+                    iranyitoSzamokSqlContent = await client.GetStringAsync(iranyitoSzamokSql);
                 }
 
                 using (MySqlConnection masterConnection = new MySqlConnection(masterConnectionString))
                 {
                     await masterConnection.OpenAsync();
 
-                    string dropSql = "DROP DATABASE IF EXISTS projekt1;";
+                    string dropSql = "DROP DATABASE IF EXISTS projekt1; CREATE DATABASE IF NOT EXISTS projekt1;"; // biztos létrehozás
                     using (MySqlCommand dropCommand = new MySqlCommand(dropSql, masterConnection))
                     {
                         await dropCommand.ExecuteNonQueryAsync();
@@ -84,16 +97,26 @@ namespace Projekt1
                         await clearCommand.ExecuteNonQueryAsync();
                     }
 
-                    using (MySqlCommand command = new MySqlCommand(kezdoFoglalasokSql, connection))
+                    // HELEYES SORREND: ELŐSZÖR AZ IRÁNYÍTÓSZÁMOK (Parent) BESZÚRÁSA!
+                    using (MySqlCommand irszCommand = new MySqlCommand(iranyitoSzamokSqlContent, connection))
+                    {
+                        // A MySqlCommand automatikusan elválasztja a pontosvesszővel elválasztott parancsokat.
+                        // Ha a hiba ismétlődik, manuális szétbontásra lesz szükség.
+                        await irszCommand.ExecuteNonQueryAsync();
+                    }
+
+                    // MÁSODSZOR A VENDÉGEK/FOGLALÁSOK (Child) BESZÚRÁSA
+                    using (MySqlCommand command = new MySqlCommand(kezdoFoglalasokSqlContent, connection))
                     {
                         await command.ExecuteNonQueryAsync();
                     }
                 }
+                return true;
             }
             catch (Exception ex)
             {
-                Application.Exit();
                 MessageBox.Show("Hiba az adatbázis inicializálásakor! Az adatbázis nem elérhető vagy a szkript letöltése sikertelen." + Environment.NewLine + ex.Message);
+                return false;
             }
         }
 
