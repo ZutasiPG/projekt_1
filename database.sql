@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS `iranyitoszamok` (
     `irsz` VARCHAR(10) NOT NULL,
     `telepules` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`irsz_id`),
-    UNIQUE KEY `uk_irsz_telepules` (`irsz`, `telepules`),
     INDEX `idx_irsz` (`irsz`) 
 );
 
