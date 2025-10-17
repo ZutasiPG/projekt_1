@@ -4,37 +4,27 @@ INSERT INTO szobak (agy, potagy) VALUES
 (2, 0), (1, 1), (3, 1), (2, 2), (1, 0);
 
 -- Vendégek
-INSERT INTO vendegek (vnev, irsz, utca, hazSz, telefonSz) VALUES
-('Kovács Péter', '1111', 'Fő utca', '12', '06301234567'),
-('Nagy Anna', '2222', 'Kossuth Lajos utca', '45', '06302223333'),
-('Szabó László', '3333', 'Petőfi Sándor utca', '6B', '06303334444'),
-('Tóth Mária', '4444', 'Arany János utca', '78', '06304445555'),
-('Varga Gábor', '5555', 'Széchenyi tér', '9', '06305556666'),
-('Balogh Zsuzsa', '6666', 'Bartók Béla út', '101', '06306667777'),
-('Farkas Dénes', '7777', 'Ady Endre utca', '23', '06307778888'),
-('Horváth Eszter', '8888', 'Jókai Mór utca', '14', '06308889999'),
-('Kiss István', '9999', 'Rákóczi út', '7', '06309990000'),
-('Molnár Katalin', '1010', 'Deák Ferenc utca', '3A', '06301010101');
+INSERT INTO vendegek (vnev, telepules, utca, hazSz, telefonSz) VALUES
+('Kovács Péter', 'Budapest', 'Fő utca', '12', '06301234567'),
+('Nagy Anna', 'Debrecen', 'Kossuth Lajos utca', '45', '06302223333'),
+('Szabó László', 'Szeged', 'Petőfi Sándor utca', '6B', '06303334444'),
+('Tóth Mária', 'Pécs', 'Arany János utca', '78', '06304445555'),
+('Varga Gábor', 'Győr', 'Széchenyi tér', '9', '06305556666'),
+('Balogh Zsuzsa', 'Miskolc', 'Bartók Béla út', '101', '06306667777'),
+('Farkas Dénes', 'Veszprém', 'Ady Endre utca', '23', '06307778888'),
+('Molnár Eszter', 'Eger', 'Bajcsy-Zsilinszky utca', '50', '06308889999'),
+('Kiss Zoltán', 'Szolnok', 'Rákóczi út', '1A', '06309990000'),
+('Horváth Krisztina', 'Kecskemét', 'Dózsa György út', '33', '06300001111');
 
--- Foglalások (20 db)
+-- Foglalások
 INSERT INTO foglalasok (vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve) VALUES
-(1, 1, '2025-10-05 14:00:00', '2025-10-07 10:00:00', 2, TRUE, FALSE, TRUE),
+(1, 1, '2025-10-01 14:00:00', '2025-10-04 10:00:00', 2, TRUE, FALSE, TRUE),
 (2, 2, '2025-10-06 15:00:00', '2025-10-10 11:00:00', 3, FALSE, TRUE, FALSE),
 (3, 3, '2025-10-08 12:00:00', '2025-10-09 10:00:00', 1, TRUE, FALSE, TRUE),
 (4, 4, '2025-10-12 16:00:00', '2025-10-15 11:00:00', 2, FALSE, FALSE, FALSE),
 (5, 5, '2025-10-20 13:00:00', '2025-10-25 10:00:00', 4, TRUE, TRUE, TRUE),
 (6, 6, '2025-10-02 14:00:00', '2025-10-03 09:00:00', 1, FALSE, FALSE, TRUE),
 (7, 7, '2025-10-10 15:00:00', '2025-10-12 11:00:00', 2, TRUE, FALSE, FALSE),
-(8, 8, '2025-10-15 12:00:00', '2025-10-18 10:00:00', 3, FALSE, TRUE, TRUE),
-(9, 9, '2025-10-22 14:00:00', '2025-10-24 09:00:00', 2, TRUE, TRUE, FALSE),
-(10, 10, '2025-10-25 13:00:00', '2025-10-26 11:00:00', 1, FALSE, FALSE, TRUE),
-(1, 2, '2025-11-01 14:00:00', '2025-11-03 10:00:00', 2, TRUE, FALSE, FALSE),
-(2, 3, '2025-11-05 15:00:00', '2025-11-07 11:00:00', 1, FALSE, TRUE, TRUE),
-(3, 4, '2025-11-10 12:00:00', '2025-11-13 09:00:00', 2, TRUE, FALSE, FALSE),
-(4, 5, '2025-11-15 16:00:00', '2025-11-18 11:00:00', 3, FALSE, TRUE, TRUE),
-(5, 6, '2025-11-20 14:00:00', '2025-11-22 09:00:00', 2, TRUE, FALSE, FALSE),
-(6, 7, '2025-11-25 13:00:00', '2025-11-28 10:00:00', 2, FALSE, TRUE, TRUE),
-(7, 8, '2025-12-01 12:00:00', '2025-12-05 11:00:00', 4, TRUE, TRUE, FALSE),
-(8, 9, '2025-12-08 15:00:00', '2025-12-10 10:00:00', 1, FALSE, FALSE, TRUE),
-(9, 10, '2025-12-12 14:00:00', '2025-12-15 11:00:00', 2, TRUE, FALSE, FALSE),
-(10, 1, '2025-12-18 13:00:00', '2025-12-20 09:00:00', 2, FALSE, TRUE, TRUE);
+(8, 8, '2025-10-15 13:00:00', '2025-10-18 10:00:00', 3, FALSE, TRUE, TRUE),
+(9, 9, '2025-10-25 16:00:00', '2025-10-28 11:00:00', 2, TRUE, FALSE, FALSE),
+(10, 10, '2025-10-05 14:00:00', '2025-10-07 10:00:00', 1, TRUE, TRUE, TRUE);

@@ -17,7 +17,6 @@ namespace Projekt1
     {
         private const string DatabaseSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/database.sql";
         private const string KezdoFoglalasokSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/kezdoFoglalasok.sql";
-        private const string iranyitoSzamokSql = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/addIrsz.sql";
 
         public static bool bad = false;
 
@@ -80,13 +79,11 @@ namespace Projekt1
                 string dataConnectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
                 string databaseSql;
                 string kezdoFoglalasokSqlContent;
-                string iranyitoSzamokSqlContent;
 
                 using (HttpClient client = new HttpClient())
                 {
                     databaseSql = await client.GetStringAsync(DatabaseSqlUrl);
                     kezdoFoglalasokSqlContent = await client.GetStringAsync(KezdoFoglalasokSqlUrl);
-                    iranyitoSzamokSqlContent = await client.GetStringAsync(iranyitoSzamokSql);
                 }
 
                 using (MySqlConnection masterConnection = new MySqlConnection(masterConnectionString))
@@ -108,13 +105,9 @@ namespace Projekt1
                                     TRUNCATE TABLE foglalasok;
                                     TRUNCATE TABLE vendegek;
                                     TRUNCATE TABLE szobak;
-                                    TRUNCATE TABLE iranyitoszamok;
                                     SET FOREIGN_KEY_CHECKS = 1;
                                 ";
                     await ExecuteSqlScript(clearSql, connection);
-
-                    string iranyitoSzamokIgnoreSql = iranyitoSzamokSqlContent.Replace("INSERT INTO", "INSERT IGNORE INTO");
-                    await ExecuteSqlScript(iranyitoSzamokIgnoreSql, connection);
 
                     await ExecuteSqlScript(kezdoFoglalasokSqlContent, connection);
                 }
@@ -129,7 +122,7 @@ namespace Projekt1
 
         public void joE()
         {
-            if (vendegNeve.Text != string.Empty && vendegUtca.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegIrsz.Text, out int a) && int.TryParse(vendegHazszam.Text, out int b) && tolIg != "")
+            if (vendegNeve.Text != string.Empty && vendegIrsz.Text != string.Empty && vendegUtca.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegHazszam.Text, out int b) && tolIg != "")
             {
                 foglal.Enabled = true;
                 foglal.BackColor = Color.Green;
@@ -184,12 +177,13 @@ namespace Projekt1
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string sql = "INSERT INTO vendegek (vnev, irsz, utca, hazSz, telefonSz) " +
-                             "VALUES (@Nev, @Irsz, @Utca, @Hazszam, @Telefon)";
+
+                string sql = "INSERT INTO vendegek (vnev, telepules, utca, hazSz, telefonSz) " +
+                             "VALUES (@Nev, @Telepules, @Utca, @Hazszam, @Telefon)";
                 using (MySqlCommand command = new MySqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Nev", vendegNeve.Text);
-                    command.Parameters.AddWithValue("@Irsz", vendegIrsz.Text);
+                    command.Parameters.AddWithValue("@Telepules", vendegIrsz.Text);
                     command.Parameters.AddWithValue("@Utca", vendegUtca.Text);
                     command.Parameters.AddWithValue("@Hazszam", vendegHazszam.Text);
                     command.Parameters.AddWithValue("@Telefon", vendegTel.Text);

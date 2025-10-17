@@ -11,27 +11,15 @@ CREATE TABLE IF NOT EXISTS `szobak` (
     PRIMARY KEY (`szobaAz`)
 );
 
-CREATE TABLE IF NOT EXISTS `iranyitoszamok` (
-    `irsz_id` INT NOT NULL AUTO_INCREMENT,
-    `irsz` VARCHAR(10) NOT NULL,
-    `telepules` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`irsz_id`),
-    INDEX `idx_irsz` (`irsz`) 
-);
-
 CREATE TABLE IF NOT EXISTS `vendegek` (
     `vsorsz` INT NOT NULL AUTO_INCREMENT,
     `vnev` VARCHAR(255) NOT NULL,
-    `irsz` VARCHAR(10) NOT NULL,
+    `telepules` VARCHAR(255) NOT NULL,
     `utca` VARCHAR(255) NOT NULL,
     `hazSz` VARCHAR(50) NOT NULL,
     `telefonSz` VARCHAR(50) NOT NULL,
     `aktivE` BOOLEAN NOT NULL DEFAULT TRUE,
-    PRIMARY KEY (`vsorsz`),
-    CONSTRAINT `vendegek_irsz_foreign`
-        FOREIGN KEY (`irsz`) REFERENCES `iranyitoszamok` (`irsz`)
-        ON DELETE RESTRICT
-        ON UPDATE CASCADE
+    PRIMARY KEY (`vsorsz`)
 );
 
 CREATE TABLE IF NOT EXISTS `foglalasok` (
