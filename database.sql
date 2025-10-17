@@ -15,9 +15,11 @@ CREATE TABLE IF NOT EXISTS `vendegek` (
     `vsorsz` INT NOT NULL AUTO_INCREMENT,
     `vnev` VARCHAR(255) NOT NULL,
     `telepules` VARCHAR(255) NOT NULL,
-    `utca` VARCHAR(255) NOT NULL,
+    `koztNeve` VARCHAR(255) NOT NULL,
+    `koztTipusa` VARCHAR(255) NOT NULL,
     `hazSz` VARCHAR(50) NOT NULL,
     `telefonSz` VARCHAR(50) NOT NULL,
+    `hanyFo` INT NOT NULL,
     `aktivE` BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (`vsorsz`)
 );

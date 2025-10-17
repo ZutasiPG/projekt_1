@@ -38,12 +38,16 @@
             this.lbl4 = new System.Windows.Forms.Label();
             this.vendegIrsz = new System.Windows.Forms.TextBox();
             this.lbl5 = new System.Windows.Forms.Label();
-            this.vendegUtca = new System.Windows.Forms.TextBox();
+            this.vendegKoztTipusa = new System.Windows.Forms.TextBox();
             this.lbl6 = new System.Windows.Forms.Label();
             this.vendegHazszam = new System.Windows.Forms.TextBox();
             this.lbl7 = new System.Windows.Forms.Label();
             this.vendegTel = new System.Windows.Forms.TextBox();
             this.foglal = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.vendegKozteruletNeve = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.hanyFo = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // naptar
@@ -108,16 +112,16 @@
             // 
             this.lbl4.AutoSize = true;
             this.lbl4.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.lbl4.Location = new System.Drawing.Point(36, 128);
+            this.lbl4.Location = new System.Drawing.Point(99, 128);
             this.lbl4.Name = "lbl4";
-            this.lbl4.Size = new System.Drawing.Size(115, 13);
+            this.lbl4.Size = new System.Drawing.Size(52, 13);
             this.lbl4.TabIndex = 7;
-            this.lbl4.Text = "Vendég irányítószáma:";
+            this.lbl4.Text = "település:";
             // 
             // vendegIrsz
             // 
             this.vendegIrsz.Location = new System.Drawing.Point(157, 127);
-            this.vendegIrsz.MaxLength = 4;
+            this.vendegIrsz.MaxLength = 255;
             this.vendegIrsz.Name = "vendegIrsz";
             this.vendegIrsz.Size = new System.Drawing.Size(100, 20);
             this.vendegIrsz.TabIndex = 6;
@@ -127,34 +131,34 @@
             // 
             this.lbl5.AutoSize = true;
             this.lbl5.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.lbl5.Location = new System.Drawing.Point(72, 154);
+            this.lbl5.Location = new System.Drawing.Point(62, 180);
             this.lbl5.Name = "lbl5";
-            this.lbl5.Size = new System.Drawing.Size(79, 13);
+            this.lbl5.Size = new System.Drawing.Size(89, 13);
             this.lbl5.TabIndex = 9;
-            this.lbl5.Text = "Vendég utcája:";
+            this.lbl5.Text = "közterület típusa:";
             // 
-            // vendegUtca
+            // vendegKoztTipusa
             // 
-            this.vendegUtca.Location = new System.Drawing.Point(157, 152);
-            this.vendegUtca.MaxLength = 60;
-            this.vendegUtca.Name = "vendegUtca";
-            this.vendegUtca.Size = new System.Drawing.Size(100, 20);
-            this.vendegUtca.TabIndex = 8;
-            this.vendegUtca.TextChanged += new System.EventHandler(this.vendegUtca_TextChanged);
+            this.vendegKoztTipusa.Location = new System.Drawing.Point(157, 177);
+            this.vendegKoztTipusa.MaxLength = 60;
+            this.vendegKoztTipusa.Name = "vendegKoztTipusa";
+            this.vendegKoztTipusa.Size = new System.Drawing.Size(100, 20);
+            this.vendegKoztTipusa.TabIndex = 8;
+            this.vendegKoztTipusa.TextChanged += new System.EventHandler(this.vendegUtca_TextChanged);
             // 
             // lbl6
             // 
             this.lbl6.AutoSize = true;
             this.lbl6.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.lbl6.Location = new System.Drawing.Point(54, 180);
+            this.lbl6.Location = new System.Drawing.Point(100, 206);
             this.lbl6.Name = "lbl6";
-            this.lbl6.Size = new System.Drawing.Size(97, 13);
+            this.lbl6.Size = new System.Drawing.Size(51, 13);
             this.lbl6.TabIndex = 11;
-            this.lbl6.Text = "Vendég házszáma:";
+            this.lbl6.Text = "házszám:";
             // 
             // vendegHazszam
             // 
-            this.vendegHazszam.Location = new System.Drawing.Point(157, 177);
+            this.vendegHazszam.Location = new System.Drawing.Point(157, 202);
             this.vendegHazszam.MaxLength = 10;
             this.vendegHazszam.Name = "vendegHazszam";
             this.vendegHazszam.Size = new System.Drawing.Size(100, 20);
@@ -165,7 +169,7 @@
             // 
             this.lbl7.AutoSize = true;
             this.lbl7.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.lbl7.Location = new System.Drawing.Point(39, 206);
+            this.lbl7.Location = new System.Drawing.Point(39, 232);
             this.lbl7.Name = "lbl7";
             this.lbl7.Size = new System.Drawing.Size(112, 13);
             this.lbl7.TabIndex = 13;
@@ -173,9 +177,8 @@
             // 
             // vendegTel
             // 
-            this.vendegTel.Location = new System.Drawing.Point(157, 202);
+            this.vendegTel.Location = new System.Drawing.Point(157, 227);
             this.vendegTel.MaxLength = 20;
-            this.vendegTel.Text = string.Empty;
             this.vendegTel.Name = "vendegTel";
             this.vendegTel.Size = new System.Drawing.Size(100, 20);
             this.vendegTel.TabIndex = 12;
@@ -195,19 +198,61 @@
             this.foglal.UseVisualStyleBackColor = false;
             this.foglal.Click += new System.EventHandler(this.foglal_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label1.Location = new System.Drawing.Point(68, 154);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "közterület neve:";
+            // 
+            // vendegKozteruletNeve
+            // 
+            this.vendegKozteruletNeve.Location = new System.Drawing.Point(157, 152);
+            this.vendegKozteruletNeve.MaxLength = 60;
+            this.vendegKozteruletNeve.Name = "vendegKozteruletNeve";
+            this.vendegKozteruletNeve.Size = new System.Drawing.Size(100, 20);
+            this.vendegKozteruletNeve.TabIndex = 15;
+            this.vendegKozteruletNeve.TextChanged += new System.EventHandler(this.vendegKozteruletNeve_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label2.Location = new System.Drawing.Point(49, 257);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(102, 13);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Hány fővel érkezne:";
+            // 
+            // hanyFo
+            // 
+            this.hanyFo.Location = new System.Drawing.Point(157, 253);
+            this.hanyFo.MaxLength = 20;
+            this.hanyFo.Name = "hanyFo";
+            this.hanyFo.Size = new System.Drawing.Size(100, 20);
+            this.hanyFo.TabIndex = 17;
+            this.hanyFo.TextChanged += new System.EventHandler(this.hanyFo_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InfoText;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.hanyFo);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.vendegKozteruletNeve);
             this.Controls.Add(this.foglal);
             this.Controls.Add(this.lbl7);
             this.Controls.Add(this.vendegTel);
             this.Controls.Add(this.lbl6);
             this.Controls.Add(this.vendegHazszam);
             this.Controls.Add(this.lbl5);
-            this.Controls.Add(this.vendegUtca);
+            this.Controls.Add(this.vendegKoztTipusa);
             this.Controls.Add(this.lbl4);
             this.Controls.Add(this.vendegIrsz);
             this.Controls.Add(this.lbl3);
@@ -236,12 +281,16 @@
         private System.Windows.Forms.Label lbl4;
         private System.Windows.Forms.TextBox vendegIrsz;
         private System.Windows.Forms.Label lbl5;
-        private System.Windows.Forms.TextBox vendegUtca;
+        private System.Windows.Forms.TextBox vendegKoztTipusa;
         private System.Windows.Forms.Label lbl6;
         private System.Windows.Forms.TextBox vendegHazszam;
         private System.Windows.Forms.Label lbl7;
         private System.Windows.Forms.TextBox vendegTel;
         private System.Windows.Forms.Button foglal;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox vendegKozteruletNeve;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox hanyFo;
     }
 }
 

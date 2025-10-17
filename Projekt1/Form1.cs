@@ -22,7 +22,7 @@ namespace Projekt1
 
         public Form1()
         {
-            bool initializationSuccess = Task.Run(() => InitializeDatabaseFromWeb()).Result;
+            bool initializationSuccess = InitializeDatabaseFromWeb();
 
             if (initializationSuccess)
             {
@@ -54,7 +54,7 @@ namespace Projekt1
             }
         }
 
-        private async Task ExecuteSqlScript(string sqlScript, MySqlConnection connection)
+        private void ExecuteSqlScript(string sqlScript, MySqlConnection connection)
         {
             string[] commands = sqlScript.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -65,13 +65,13 @@ namespace Projekt1
                 {
                     using (MySqlCommand command = new MySqlCommand(trimmedCommand, connection))
                     {
-                        await command.ExecuteNonQueryAsync();
+                        command.ExecuteNonQuery();
                     }
                 }
             }
         }
 
-        private async Task<bool> InitializeDatabaseFromWeb()
+        private bool InitializeDatabaseFromWeb()
         {
             try
             {
@@ -82,23 +82,23 @@ namespace Projekt1
 
                 using (HttpClient client = new HttpClient())
                 {
-                    databaseSql = await client.GetStringAsync(DatabaseSqlUrl);
-                    kezdoFoglalasokSqlContent = await client.GetStringAsync(KezdoFoglalasokSqlUrl);
+                    databaseSql = client.GetStringAsync(DatabaseSqlUrl).Result;
+                    kezdoFoglalasokSqlContent = client.GetStringAsync(KezdoFoglalasokSqlUrl).Result;
                 }
 
                 using (MySqlConnection masterConnection = new MySqlConnection(masterConnectionString))
                 {
-                    await masterConnection.OpenAsync();
+                    masterConnection.Open();
 
                     string setupScript = "DROP DATABASE IF EXISTS projekt1; CREATE DATABASE IF NOT EXISTS projekt1;";
-                    await ExecuteSqlScript(setupScript, masterConnection);
+                    ExecuteSqlScript(setupScript, masterConnection);
                 }
 
                 using (MySqlConnection connection = new MySqlConnection(dataConnectionString))
                 {
-                    await connection.OpenAsync();
+                    connection.Open();
 
-                    await ExecuteSqlScript(databaseSql, connection);
+                    ExecuteSqlScript(databaseSql, connection);
 
                     string clearSql = @"
                                     SET FOREIGN_KEY_CHECKS = 0;
@@ -107,9 +107,9 @@ namespace Projekt1
                                     TRUNCATE TABLE szobak;
                                     SET FOREIGN_KEY_CHECKS = 1;
                                 ";
-                    await ExecuteSqlScript(clearSql, connection);
+                    ExecuteSqlScript(clearSql, connection);
 
-                    await ExecuteSqlScript(kezdoFoglalasokSqlContent, connection);
+                    ExecuteSqlScript(kezdoFoglalasokSqlContent, connection);
                 }
                 return true;
             }
@@ -122,7 +122,7 @@ namespace Projekt1
 
         public void joE()
         {
-            if (vendegNeve.Text != string.Empty && vendegIrsz.Text != string.Empty && vendegUtca.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegHazszam.Text, out int b) && tolIg != "")
+            if (vendegNeve.Text != string.Empty && vendegIrsz.Text != string.Empty && vendegKoztTipusa.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegHazszam.Text, out int b) && tolIg != "" && vendegKozteruletNeve.Text != "" && int.TryParse(hanyFo.Text, out int c))
             {
                 foglal.Enabled = true;
                 foglal.BackColor = Color.Green;
@@ -162,8 +162,9 @@ namespace Projekt1
         {
             vendegNeve.Text = "";
             vendegIrsz.Text = "";
-            vendegUtca.Text = "";
+            vendegKoztTipusa.Text = "";
             vendegHazszam.Text = "";
+            vendegKozteruletNeve.Text = "";
             vendegTel.Text = "";
             naptar.SelectionStart = DateTime.Now;
             naptar.SelectionEnd = DateTime.Now;
@@ -178,15 +179,17 @@ namespace Projekt1
             {
                 connection.Open();
 
-                string sql = "INSERT INTO vendegek (vnev, telepules, utca, hazSz, telefonSz) " +
-                             "VALUES (@Nev, @Telepules, @Utca, @Hazszam, @Telefon)";
+                string sql = "INSERT INTO vendegek (vnev, telepules, koztNeve, koztTipusa, hazSz, telefonSz, hanyFo) " +
+                             "VALUES (@Nev, @Telepules, @KoztNeve, @KoztTipusa, @Hazszam, @Telefon, @HanyFo )";
                 using (MySqlCommand command = new MySqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Nev", vendegNeve.Text);
                     command.Parameters.AddWithValue("@Telepules", vendegIrsz.Text);
-                    command.Parameters.AddWithValue("@Utca", vendegUtca.Text);
+                    command.Parameters.AddWithValue("@KoztNeve", vendegKoztTipusa.Text);
+                    command.Parameters.AddWithValue("@KoztTipusa", vendegKoztTipusa.Text);
                     command.Parameters.AddWithValue("@Hazszam", vendegHazszam.Text);
                     command.Parameters.AddWithValue("@Telefon", vendegTel.Text);
+                    command.Parameters.AddWithValue("@HanyFo", hanyFo.Text);
                     command.ExecuteNonQuery();
                 }
             }
@@ -221,6 +224,16 @@ namespace Projekt1
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void vendegKozteruletNeve_TextChanged(object sender, EventArgs e)
+        {
+            joE();
+        }
+
+        private void hanyFo_TextChanged(object sender, EventArgs e)
+        {
+            joE();
         }
     }
 }
