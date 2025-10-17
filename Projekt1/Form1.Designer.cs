@@ -175,6 +175,7 @@
             // 
             this.vendegTel.Location = new System.Drawing.Point(157, 202);
             this.vendegTel.MaxLength = 20;
+            this.vendegTel.Text = string.Empty;
             this.vendegTel.Name = "vendegTel";
             this.vendegTel.Size = new System.Drawing.Size(100, 20);
             this.vendegTel.TabIndex = 12;
@@ -218,6 +219,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Projekt1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

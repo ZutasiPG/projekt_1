@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace Projekt1{
     public partial class Form1 : Form{
+        public static bool bad = false;
         public Form1()
         {
             InitializeComponent();
@@ -28,36 +29,41 @@ namespace Projekt1{
             System.Drawing.Drawing2D.GraphicsPath gp = new System.Drawing.Drawing2D.GraphicsPath();
             gp.AddEllipse(0, 0, exit.Width, exit.Height);
             exit.Region = new Region(gp);
-            string connectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
-            using (MySqlConnection connection = new MySqlConnection(connectionString)){
-                connection.Open();
-                string sql = File.ReadAllText("C:\\Users\\UtasiZalan\\Documents\\GitHub\\foglalasProjekt\\database2.0.sql"); 
-                using (MySqlCommand command = new MySqlCommand(sql, connection)){
-                    command.ExecuteNonQuery(); 
+            try{
+                string connectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
+                using (MySqlConnection connection = new MySqlConnection(connectionString)){
+                    connection.Open();
+                    string sql = File.ReadAllText("C:\\Users\\UtasiZalan\\Documents\\GitHub\\foglalasProjekt\\database2.0.sql");
+                    using (MySqlCommand command = new MySqlCommand(sql, connection)){
+                        command.ExecuteNonQuery();
+                    }
                 }
-            }
-            connectionString = "Server=localhost;Database=Projekt1;User ID=root;Password=mysql;";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-                string clearSql = @"
+                connectionString = "Server=localhost;Database=Projekt1;User ID=root;Password=mysql;";
+                using (MySqlConnection connection = new MySqlConnection(connectionString)){
+                    connection.Open();
+                    string clearSql = @"
                                     SET FOREIGN_KEY_CHECKS = 0;
                                     TRUNCATE TABLE foglalasok;
                                     TRUNCATE TABLE vendegek;
                                     TRUNCATE TABLE szobak;
                                     SET FOREIGN_KEY_CHECKS = 1;
                                 ";
-                using (MySqlCommand clearCommand = new MySqlCommand(clearSql, connection)){
-                    clearCommand.ExecuteNonQuery();
+                    using (MySqlCommand clearCommand = new MySqlCommand(clearSql, connection)){
+                        clearCommand.ExecuteNonQuery();
+                    }
+                    string sql = File.ReadAllText(@"C:\Users\UtasiZalan\Documents\GitHub\foglalasProjekt\kezdoFoglalasok.sql");
+                    using (MySqlCommand command = new MySqlCommand(sql, connection)){
+                        command.ExecuteNonQuery();
+                    }
                 }
-                string sql = File.ReadAllText(@"C:\Users\UtasiZalan\Documents\GitHub\foglalasProjekt\kezdoFoglalasok.sql");
-                using (MySqlCommand command = new MySqlCommand(sql, connection)){
-                    command.ExecuteNonQuery();
-                }
+            }
+            catch (Exception){
+                Application.Exit();
+                MessageBox.Show("Hiba az adatbázis inicializálásakor! Az adatbátis nem elérhető!");
             }
         }
         public void joE(){
-            if (vendegNeve.Text != null && vendegUtca.Text != null && vendegTel.Text != null && int.TryParse(vendegIrsz.Text, out int a) && int.TryParse(vendegHazszam.Text, out int b) && tolIg != ""){
+            if (vendegNeve.Text != string.Empty && vendegUtca.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegIrsz.Text, out int a) && int.TryParse(vendegHazszam.Text, out int b) && tolIg != ""){
                 foglal.Enabled = true;
                 foglal.BackColor = Color.Green;
             }
@@ -67,19 +73,15 @@ namespace Projekt1{
             }
         }
         DateTime? kezdodatum = null;
-        bool programbolValtozik = false;
         public static string tolIg = "";
         private void naptar_DateChanged(object sender, DateRangeEventArgs e){
-            if (programbolValtozik) return;
             if (kezdodatum == null) kezdodatum = e.Start;
             else{
                 DateTime kezd = (kezdodatum < e.Start) ? (DateTime)kezdodatum : e.Start;
                 DateTime veg = (kezdodatum > e.Start) ? (DateTime)kezdodatum : e.Start;
-                programbolValtozik = true;
+                if (kezd < naptar.MinDate) kezd = naptar.MinDate;
                 naptar.SelectionStart = kezd;
                 naptar.SelectionEnd = veg;
-                programbolValtozik = false;
-                //MessageBox.Show($"Kijelölt intervallum: {kezd.ToShortDateString()} - {veg.ToShortDateString()}");
                 tolIg = $"{kezd.ToShortDateString()} - {veg.ToShortDateString()}";
                 kezdodatum = null;
             }
@@ -120,22 +122,20 @@ namespace Projekt1{
         private void vendegNeve_TextChanged(object sender, EventArgs e){
             joE();
         }
-        
-
         private void vendegIrsz_TextChanged(object sender, EventArgs e){
             joE() ;
         }
-
         private void vendegUtca_TextChanged(object sender, EventArgs e){
             joE();
         }
-
         private void vendegHazszam_TextChanged(object sender, EventArgs e){
             joE();
         }
-
         private void vendegTel_TextChanged(object sender, EventArgs e){
             joE();
+        }
+        private void Form1_Load(object sender, EventArgs e){
+
         }
     }
 }
