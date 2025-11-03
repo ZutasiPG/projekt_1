@@ -72,6 +72,7 @@
             // exit
             // 
             this.exit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.exit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.exit.Location = new System.Drawing.Point(12, 12);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(75, 23);
@@ -241,7 +242,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InfoText;
+            this.CancelButton = this.exit;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ControlBox = false;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.hanyFo);
             this.Controls.Add(this.label1);
@@ -262,8 +265,10 @@
             this.Controls.Add(this.lbl1);
             this.Controls.Add(this.naptar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(816, 489);
+            this.MinimumSize = new System.Drawing.Size(816, 489);
             this.Name = "Form1";
-            this.Text = "Projekt1";
+            this.Text = "SANCTUM VITAE";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
