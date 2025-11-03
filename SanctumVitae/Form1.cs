@@ -287,7 +287,7 @@ namespace SanctumVitae{
             Controls.Add(lbl1);
             Controls.Add(naptar);
             MaximumSize = new System.Drawing.Size(816, 489);
-            MinimumSize = new System.Drawing.Size(816, 489);
+            MinimumSize = new System.Drawing.Size(816, 489);    
 
             bool initializationSuccess = InitializeDatabaseFromWeb();
 
