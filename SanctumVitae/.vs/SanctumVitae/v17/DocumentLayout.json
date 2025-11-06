@@ -11,7 +11,7 @@
       "RelativeMoniker": "D:0:0:{EDDEB5E8-0D7A-4D34-9681-DDD7815AFF52}|SanctumVitae.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EDDEB5E8-0D7A-4D34-9681-DDD7815AFF52}|SanctumVitae.csproj|c:\\users\\zutasi\\documents\\github\\projekt_1\\sanctumvitae\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EDDEB5E8-0D7A-4D34-9681-DDD7815AFF52}|SanctumVitae.csproj|C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\SanctumVitae\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EDDEB5E8-0D7A-4D34-9681-DDD7815AFF52}|SanctumVitae.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -34,8 +34,7 @@
               "RelativeToolTip": "Form1.Designer.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAgwCYAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T17:47:09.098Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T17:47:09.098Z"
             },
             {
               "$type": "Document",
@@ -45,7 +44,7 @@
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\SanctumVitae\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAAcwAoCAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAAoCAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-03T11:14:26.276Z",
               "EditorCaption": ""
@@ -59,8 +58,7 @@
               "ToolTip": "C:\\Users\\Zutasi\\Documents\\GitHub\\projekt_1\\SanctumVitae\\Form1.cs [Design]",
               "RelativeToolTip": "Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T11:14:20.807Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-11-03T11:14:20.807Z"
             }
           ]
         }

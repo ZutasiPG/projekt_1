@@ -521,7 +521,6 @@ namespace SanctumVitae{
                 return false;
             }
         }
-        
         #region joE ellenőrzés
         private void vendegNeve_TextChanged(object sender, EventArgs e)
         {
