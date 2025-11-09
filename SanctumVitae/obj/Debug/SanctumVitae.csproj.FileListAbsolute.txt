@@ -123,3 +123,5 @@ C:\Users\Zutasi\Documents\GitHub\projekt_1\SanctumVitae\obj\Debug\SanctumV.C0270
 C:\Users\Zutasi\Documents\GitHub\projekt_1\SanctumVitae\obj\Debug\SanctumVitae.exe
 C:\Users\Zutasi\Documents\GitHub\projekt_1\SanctumVitae\obj\Debug\SanctumVitae.pdb
 C:\Users\Zutasi\Documents\GitHub\projekt_1\SanctumVitae\obj\Debug\SanctumVitae.szoba.resources
+C:\Users\Zutasi\Documents\GitHub\projekt_1\SanctumVitae\bin\Debug\itextsharp.dll
+C:\Users\Zutasi\Documents\GitHub\projekt_1\SanctumVitae\bin\Debug\itextsharp.xml
