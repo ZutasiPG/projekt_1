@@ -53,7 +53,6 @@ namespace SanctumVitae{
     public partial class Form1 : Form{
         #region változók
         private const string DatabaseSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/database.sql";
-        private const string KezdoFoglalasokSqlUrl = "https://raw.githubusercontent.com/ZutasiPG/projekt_1/main/kezdoFoglalasok.sql";
         private const string dataConnectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
 
         public Button exit = new Button();
@@ -78,14 +77,22 @@ namespace SanctumVitae{
         public Label lbl7 = new Label();
         public Label lbl8 = new Label();
         public Label lbl9 = new Label();
+        public Label lbl10 = new Label();
+        public Label lbl11 = new Label();
+        public Label lbl12 = new Label();
+
+        public CheckBox reggeli = new CheckBox();
+        public CheckBox teljesEllatas = new CheckBox();
+        public CheckBox fizetve = new CheckBox();
 
         public static string tolIg = "";
         public DateTime? kezdodatum = null;
         public List<szoba> szobak = new List<szoba>();
         public List<foglalas> foglalasok = new List<foglalas>();
         public List<szoba> szabadSzobak = new List<szoba>();
+        public szoba kivalasztottSzoba = new szoba(-1,-1,-1);
         #endregion
-        #region Web github elérés
+        #region inicializálás
         private void ExecuteSqlScript(string sqlScript, MySqlConnection connection)
         {
             string[] commands = sqlScript.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -107,14 +114,12 @@ namespace SanctumVitae{
             try
             {
                 string masterConnectionString = "Server=localhost;Database=;User ID=root;Password=mysql;";
-                
                 string databaseSql;
-                string kezdoFoglalasokSqlContent;
+                string kezdoFoglalasokSqlContent = File.ReadAllText("kezdoFoglalasok.sql");
 
                 using (HttpClient client = new HttpClient())
                 {
                     databaseSql = client.GetStringAsync(DatabaseSqlUrl).Result;
-                    kezdoFoglalasokSqlContent = client.GetStringAsync(KezdoFoglalasokSqlUrl).Result;
                 }
 
                 using (MySqlConnection masterConnection = new MySqlConnection(masterConnectionString))
@@ -307,6 +312,42 @@ namespace SanctumVitae{
                 hanyFo.TabIndex = 17;
                 hanyFo.TextChanged += new System.EventHandler(hanyFo_TextChanged);
 
+                reggeli.Checked = false;
+                reggeli.Location = new System.Drawing.Point(hanyFo.Location.X, 280);
+                reggeli.Name = "reggeli";
+                reggeli.CheckedChanged += new System.EventHandler(reggeli_CheckedChanged);
+
+                lbl10.AutoSize = true;
+                lbl10.ForeColor = System.Drawing.SystemColors.ControlLight;
+                lbl10.Location = new System.Drawing.Point(reggeli.Location.X-80, 282);
+                lbl10.Name = "lbl10";
+                lbl10.Size = new System.Drawing.Size(112, 13);
+                lbl10.Text = "Kér e reggelit?";
+
+                teljesEllatas.Checked = false;
+                teljesEllatas.Location = new System.Drawing.Point(hanyFo.Location.X , 310);
+                teljesEllatas.Name = "teljesEllatas";
+                teljesEllatas.CheckedChanged += new System.EventHandler(TeljesEll_CheckedChanged);
+
+                lbl11.AutoSize = true;
+                lbl11.ForeColor = System.Drawing.SystemColors.ControlLight;
+                lbl11.Location = new System.Drawing.Point(teljesEllatas.Location.X-105, 312);
+                lbl11.Name = "lbl11";
+                lbl11.Size = new System.Drawing.Size(112, 13);
+                lbl11.Text = "Kér e teljes ellátást?";
+
+                fizetve.Checked = false;
+                fizetve.Location = new System.Drawing.Point(hanyFo.Location.X , 340);
+                fizetve.Name = "fizetve";
+                fizetve.CheckedChanged += new System.EventHandler(Fizetve_CheckedChanged);
+
+                lbl12.AutoSize = true;
+                lbl12.ForeColor = System.Drawing.SystemColors.ControlLight;
+                lbl12.Location = new System.Drawing.Point(fizetve.Location.X - 84, 342);
+                lbl12.Name = "lbl12";
+                lbl12.Size = new System.Drawing.Size(112, 13);
+                lbl12.Text = "Kifizeti e előre?";
+
                 AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
                 AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
                 BackColor = System.Drawing.SystemColors.InfoText;
@@ -332,6 +373,12 @@ namespace SanctumVitae{
                 Controls.Add(exit);
                 Controls.Add(lbl1);
                 Controls.Add(naptar);
+                Controls.Add(fizetve);
+                Controls.Add(reggeli);
+                Controls.Add(teljesEllatas);
+                Controls.Add(lbl10);
+                Controls.Add(lbl11);
+                Controls.Add(lbl12);
                 MaximumSize = new System.Drawing.Size(816, 489);
                 MinimumSize = new System.Drawing.Size(816, 489);
                 Text = "Sanctum Vitae - Szállásfoglaló rendszer";
@@ -399,6 +446,19 @@ namespace SanctumVitae{
                 Application.Exit();
             }
         }
+        private void Fizetve_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
+        private void TeljesEll_CheckedChanged(object sender, EventArgs e)
+        {
+            reggeli.Checked = false;
+            reggeli.Enabled = !teljesEllatas.Checked;
+        }
+        private void reggeli_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
         private void naptar_DateChanged(object sender, DateRangeEventArgs e)
         {
             if (kezdodatum == null) kezdodatum = e.Start;
@@ -412,20 +472,21 @@ namespace SanctumVitae{
                 tolIg = $"{kezd.ToShortDateString()} - {veg.ToShortDateString()}";
                 kezdodatum = null;
             }
-            joE();
+            JoE();
         }
-        private void foglal_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("A foglalás sikeres!");
+        private void foglal_Click(object sender, EventArgs e){
+            if (kivalasztottSzoba.szobaId == -1) { 
+                MessageBox.Show("Kérem, válasszon szobát!");
+                return;
+            }
+
             string connectionString = "Server=localhost;Database=projekt1;User ID=root;Password=mysql;";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
+            using (MySqlConnection connection = new MySqlConnection(connectionString)){
                 connection.Open();
 
                 string sql = "INSERT INTO vendegek (vnev, telepules, koztNeve, koztTipusa, hazSz, telefonSz, hanyFo) " +
                              "VALUES (@Nev, @Telepules, @KoztNeve, @KoztTipusa, @Hazszam, @Telefon, @HanyFo )";
-                using (MySqlCommand command = new MySqlCommand(sql, connection))
-                {
+                using (MySqlCommand command = new MySqlCommand(sql, connection)){
                     command.Parameters.AddWithValue("@Nev", vendegNeve.Text);
                     command.Parameters.AddWithValue("@Telepules", vendegIrsz.Text);
                     command.Parameters.AddWithValue("@KoztNeve", vendegKoztTipusa.Text);
@@ -435,14 +496,75 @@ namespace SanctumVitae{
                     command.Parameters.AddWithValue("@HanyFo", hanyFo.Text);
                     command.ExecuteNonQuery();
                 }
+                sql = "INSERT INTO foglalasok (vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve) " +
+                             "VALUES (@vendeg, @szoba, @erk, @tav, @fo, @reggeli, @teljesEll, @fizetve )";
+                var myConnection = new MySqlConnection(dataConnectionString);
+                myConnection.Open();
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = myConnection;
+                myCommand.CommandText = @"
+                SELECT vendegek.vsorsz as ID 
+                FROM vendegek 
+                WHERE vnev = @vnev 
+                AND telepules = @telepules 
+                AND koztNeve = @koztNeve 
+                AND koztTipusa = @koztTipusa 
+                AND hazSz = @hazSz 
+                AND telefonSz = @telefonSz 
+                AND hanyFo = @hanyFo 
+                AND aktivE;";
+                myCommand.Parameters.AddWithValue("@vnev", vendegNeve.Text);
+                myCommand.Parameters.AddWithValue("@telepules", vendegIrsz.Text);
+                myCommand.Parameters.AddWithValue("@koztNeve", vendegKozteruletNeve.Text);
+                myCommand.Parameters.AddWithValue("@koztTipusa", vendegKoztTipusa.Text);
+                myCommand.Parameters.AddWithValue("@hazSz", vendegHazszam.Text);
+                myCommand.Parameters.AddWithValue("@telefonSz", vendegTel.Text);
+                myCommand.Parameters.AddWithValue("@hanyFo", hanyFo.Text);
+                var myReader = myCommand.ExecuteReader();
+                int id = -1;
+                while (myReader.Read()){
+                    id = myReader.GetInt32("ID");
+                }
+                using (MySqlCommand command = new MySqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@vendeg", id);
+                    command.Parameters.AddWithValue("@szoba", kivalasztottSzoba.szobaId);
+                    command.Parameters.AddWithValue("@erk", naptar.SelectionStart);
+                    command.Parameters.AddWithValue("@tav", naptar.SelectionEnd);
+                    command.Parameters.AddWithValue("@fo", hanyFo.Text);
+                    command.Parameters.AddWithValue("@reggeli", reggeli.Checked);
+                    command.Parameters.AddWithValue("@teljesEll", teljesEllatas.Checked);
+                    command.Parameters.AddWithValue("@fizetve", fizetve.Checked);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
             }
+            MessageBox.Show("A foglalás sikeres!");
             ertekTorol();
         }
         private void klikkSzoba(object sender, EventArgs e){
             Button button = sender as Button;
+            string text = button.Text;
+            string[] parts = text.Split(':');
+            int szobaId = int.Parse(parts[1].Substring(0, 2).Trim());
+            int agy = int.Parse(parts[2].Substring(0, 2).Trim());
+            int potAgy = int.Parse(parts[3].Trim().TrimEnd(')'));
+            kivalasztottSzoba = new szoba(szobaId, agy, potAgy);
         }
-        public bool joE()
+        public bool JoE()
         {
+            List<Control> toRemove = new List<Control>();
+            foreach (Control ctrl in Controls)
+            {
+                if (ctrl is Button && ctrl.Text.Contains("Szoba"))
+                {
+                    toRemove.Add(ctrl);
+                }
+            }
+            for (int i = 0; i < toRemove.Count; i++)
+            {
+                Controls.Remove(toRemove[i]);
+            }
             if (vendegNeve.Text != string.Empty && vendegIrsz.Text != string.Empty && vendegKoztTipusa.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegHazszam.Text, out int b) && tolIg != "" && vendegKozteruletNeve.Text != "" && int.TryParse(hanyFo.Text, out int c) && c > 0)
             {
                 foglal.Enabled = true;
@@ -499,55 +621,43 @@ namespace SanctumVitae{
                         Controls.Add(tmp);
                     }
                 }
-
                 return true;
+
             }
             else
             {
                 foglal.Enabled = false;
                 foglal.BackColor = Color.Red;
-                List<Control> toRemove = new List<Control>();
-                foreach (Control ctrl in Controls)
-                {
-                    if (ctrl is Button && ctrl.Text.Contains("Szoba"))
-                    {
-                        toRemove.Add(ctrl);
-                    }
-                }
-                for (int i = 0; i < toRemove.Count; i++)
-                {
-                    Controls.Remove(toRemove[i]);
-                }
                 return false;
             }
         }
         #region joE ellenőrzés
         private void vendegNeve_TextChanged(object sender, EventArgs e)
         {
-            joE();
+            JoE();
         }
         private void vendegIrsz_TextChanged(object sender, EventArgs e)
         {
-            joE();
+            JoE();
         }
         private void vendegUtca_TextChanged(object sender, EventArgs e)
         {
-            joE();
+            JoE();
         }
         private void vendegHazszam_TextChanged(object sender, EventArgs e)
         {
-            joE();
+            JoE();
         }
         private void vendegTel_TextChanged(object sender, EventArgs e)
         {
-            joE();
+            JoE();
         }
         private void vendegKozteruletNeve_TextChanged(object sender, EventArgs e)
         {
-            joE();
+            JoE();
         }
         private void hanyFo_TextChanged(object sender, EventArgs e){
-            joE();
+            JoE();
         }
         #endregion
         public void ertekTorol()
@@ -562,10 +672,61 @@ namespace SanctumVitae{
             naptar.SelectionEnd = DateTime.Now;
             tolIg = "";
             hanyFo.Text = "";
+            reggeli.Checked = false;
+            teljesEllatas.Checked = false;
+            fizetve.Checked = false;
         }
         private void exit_Click(object sender, EventArgs e)
         {
+            string file = @"kezdoFoglalasok.sql";
+
+            using (var conn = new MySqlConnection(dataConnectionString))
+            {
+                conn.Open();
+                var sb = new StringBuilder();
+
+                sb.AppendLine(beszuras(conn, "szobak", "agy, potagy"));
+                sb.AppendLine();
+                sb.AppendLine(beszuras(conn, "vendegek", "vnev, telepules, koztNeve, koztTipusa, hazSz, telefonSz, hanyFo, aktivE", true));
+                sb.AppendLine();
+                sb.AppendLine(beszuras(conn, "foglalasok", "vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve", true));
+
+                File.WriteAllText(file, sb.ToString(), Encoding.UTF8);
+            }
             Application.Exit();
+        }
+        private string beszuras(MySqlConnection conn, string table, string cols, bool boolAsText = false)
+        {
+            var list = cols.Split(',');
+            for (int i = 0; i < list.Length; i++) list[i] = list[i].Trim();
+
+            string q = $"SELECT {string.Join(", ", list)} FROM {table}";
+            var cmd = new MySqlCommand(q, conn);
+            var r = cmd.ExecuteReader();
+
+            var lines = new List<string>();
+            while (r.Read())
+            {
+                var vals = new List<string>();
+                foreach (var c in list)
+                {
+                    object v = r[c];
+                    vals.Add(Format(v, boolAsText));
+                }
+                lines.Add("(" + string.Join(", ", vals) + ")");
+            }
+            r.Close();
+
+            return $"INSERT INTO {table} ({string.Join(", ", list)}) VALUES\n{string.Join(",\n", lines)};";
+        }
+        private string Format(object v, bool boolAsText)
+        {
+            if (v == DBNull.Value) return "NULL";
+            if (v is bool b) return boolAsText ? (b ? "TRUE" : "FALSE") : (b ? "1" : "0");
+            if (v is DateTime d) return $"'{d:yyyy-MM-dd HH:mm:ss}'";
+            if (v is int || v is double || v is decimal || v is float)
+                return Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture);
+            return $"'{v.ToString().Replace("'", "''")}'";
         }
     }
 }
