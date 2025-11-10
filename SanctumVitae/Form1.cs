@@ -1,28 +1,18 @@
 ﻿using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI;
-using SanctumVitae.Properties;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Resources;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using System.Drawing.Printing;
-using System.Xml.Linq;
-
-namespace SanctumVitae
-{
+namespace SanctumVitae{
     public class szoba
     {
         public int szobaId { get; set; }
@@ -61,10 +51,9 @@ namespace SanctumVitae
     }
     public partial class Form1 : Form{
         #region változók
-        public string localSzerverKornyezet = "AMPPS";
+        public string localSzerverKornyezet = "AMPPS"; //AMPPS vagy XAMPP
         public string dataConnectionString = "";
         private TableLayoutPanel tlpJelentes;
-        private FlowLayoutPanel bar;
         private Button btnBrowse;
         public Button exit = new Button();
         public Button foglal = new Button();
@@ -155,15 +144,17 @@ namespace SanctumVitae
         }
         public void FrissitVendegAktivitas()
         {
-            using (var conn = new MySqlConnection(dataConnectionString))
+            try
             {
-                conn.Open();
-                string inaktivalSql = "UPDATE vendegek SET aktivE = 0;";
-                using (var cmd1 = new MySqlCommand(inaktivalSql, conn))
+                using (var conn = new MySqlConnection(dataConnectionString))
                 {
-                    cmd1.ExecuteNonQuery();
-                }
-                string aktivalSql = @"
+                    conn.Open();
+                    string inaktivalSql = "UPDATE vendegek SET aktivE = 0;";
+                    using (var cmd1 = new MySqlCommand(inaktivalSql, conn))
+                    {
+                        cmd1.ExecuteNonQuery();
+                    }
+                    string aktivalSql = @"
             UPDATE vendegek 
             SET aktivE = 1
             WHERE vsorsz IN (
@@ -171,11 +162,17 @@ namespace SanctumVitae
                 FROM foglalasok 
                 WHERE NOW() BETWEEN erk AND tav
             );";
-                using (var cmd2 = new MySqlCommand(aktivalSql, conn))
-                {
-                    cmd2.ExecuteNonQuery();
+                    using (var cmd2 = new MySqlCommand(aktivalSql, conn))
+                    {
+                        cmd2.ExecuteNonQuery();
+                    }
                 }
             }
+            catch (Exception)
+            {
+                return;
+            }
+            
         }
         public Form1()
         {

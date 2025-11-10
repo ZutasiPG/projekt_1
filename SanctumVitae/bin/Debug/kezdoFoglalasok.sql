@@ -23,8 +23,9 @@ INSERT INTO vendegek (vnev, telepules, koztNeve, koztTipusa, hazSz, telefonSz, h
 ('Molnár Eszter', 'Eger', 'Bajcsy-Zsilinszky', 'utca', '50', '06308889999', 1, FALSE),
 ('Kiss Zoltán', 'Szolnok', 'Rákóczi', 'út', '1A', '06309990000', 1, FALSE),
 ('Horváth Krisztina', 'Kecskemét', 'Dózsa György', 'út', '33', '06300001111', 1, FALSE),
-('Teszt', 'Orgovány', 'Kossuth L', 'utca', '21', '+36702350040', 4, FALSE),
-('Teszt2', 'Orgovány', 'Kossuth', 'utca', '21', '+36702350040', 5, TRUE);
+('Teszt', 'Orgovány', 'Kossuth L', 'utca', '21', '+36702350040', 4, TRUE),
+('Teszt2', 'Orgovány', 'Kossuth', 'utca', '21', '+36702350040', 5, FALSE),
+('T', 't', 't', 't', '23', '+3', 1, TRUE);
 
 INSERT INTO foglalasok (vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve) VALUES
 (1, 1, '2025-10-01 14:00:00', '2025-10-04 10:00:00', 2, TRUE, FALSE, TRUE),
@@ -38,4 +39,5 @@ INSERT INTO foglalasok (vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve
 (9, 9, '2025-10-25 16:00:00', '2025-10-28 11:00:00', 2, TRUE, FALSE, FALSE),
 (10, 10, '2025-10-05 14:00:00', '2025-10-07 10:00:00', 1, TRUE, TRUE, TRUE),
 (11, 8, '2025-11-10 00:00:00', '2025-11-17 00:00:00', 4, FALSE, TRUE, FALSE),
-(12, 5, '2025-11-09 19:51:34', '2025-11-10 00:00:00', 5, FALSE, FALSE, FALSE);
+(12, 5, '2025-11-09 19:51:34', '2025-11-10 00:00:00', 5, FALSE, FALSE, FALSE),
+(13, 1, '2025-11-10 07:23:40', '2025-11-13 00:00:00', 1, FALSE, FALSE, FALSE);
