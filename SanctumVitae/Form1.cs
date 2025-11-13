@@ -58,6 +58,8 @@ namespace SanctumVitae{
         public Button exit = new Button();
         public Button foglal = new Button();
         public Button foglalasMenu = new Button();
+        private Button btnVisszaFoglalashoz = new Button();
+        public Button btnJelentesek = new Button();
         public MonthCalendar naptar = new MonthCalendar();
         public TextBox vendegNeve = new TextBox();
         public TextBox vendegIrsz = new TextBox();
@@ -88,7 +90,6 @@ namespace SanctumVitae{
         public List<foglalas> foglalasok = new List<foglalas>();
         public List<szoba> szabadSzobak = new List<szoba>();
         public szoba kivalasztottSzoba = new szoba(-1, -1, -1);
-        private Button btnJelentesek = new Button();
         private Panel panelJelentes = new Panel();
         private RadioButton rbDatum = new RadioButton();
         private RadioButton rbHonap = new RadioButton();
@@ -138,7 +139,7 @@ namespace SanctumVitae{
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hiba az adatbázis inicializálásakor! Kérjük, ellenőrizze a MySQL szerver futását, vagy az internetkapcsolatot (URL-ek elérhetőségét)." + Environment.NewLine + "Részletes hiba: " + ex.Message);
+                Hibauzenet("Hiba az adatbázis inicializálásakor! Kérjük, ellenőrizze a MySQL szerver futását, vagy az internetkapcsolatot (URL-ek elérhetőségét).",ex);
                 Application.Exit();
             }
         }
@@ -170,6 +171,7 @@ namespace SanctumVitae{
             }
             catch (Exception)
             {
+                Hibauzenet("Hiba a vendég aktivitás frissítésekor!", null);
                 return;
             }
             
@@ -351,14 +353,6 @@ namespace SanctumVitae{
             lbl12.Name = "lbl12";
             lbl12.Size = new System.Drawing.Size(112, 13);
             lbl12.Text = "Kifizeti e előre?";
-            foglalasMenu.Location = new System.Drawing.Point(exit.Location.X + exit.Width + 10, exit.Location.Y + 11);
-            foglalasMenu.Name = "jelentesek";
-            foglalasMenu.Size = new System.Drawing.Size(75, 23);
-            foglalasMenu.Text = "Jelentések";
-            foglalasMenu.ForeColor = Color.White;
-            foglalasMenu.FlatStyle = FlatStyle.Flat;
-            foglalasMenu.Click += new EventHandler(foglalasMenu_Click);
-            foglalasMenu.Visible = false;
             btnJelentesek.Location = new System.Drawing.Point(exit.Location.X + exit.Width + 10, exit.Location.Y+12);
             btnJelentesek.Name = "btnJelentesek";
             btnJelentesek.Size = new System.Drawing.Size(90, 23);
@@ -399,7 +393,6 @@ namespace SanctumVitae{
             Controls.Add(lbl11);
             Controls.Add(lbl12);
             Controls.Add(noRoomLabel);
-            Controls.Add(foglalasMenu);
             MaximumSize = new System.Drawing.Size(820, 489);
             MinimumSize = new System.Drawing.Size(820, 489);
             Text = "Sanctum Vitae - Szállásfoglaló rendszer";
@@ -433,7 +426,7 @@ namespace SanctumVitae{
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                Hibauzenet("Hiba az adatbázis elérésekor!", ex);
             }
             try
             {
@@ -460,16 +453,13 @@ namespace SanctumVitae{
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                Hibauzenet("Hiba az adatbázis elérésekor!", ex);
             }
-        }
-        private void foglalasMenu_Click(object sender, EventArgs e)
-        {
         }
         private void btnJelentesek_Click(object sender, EventArgs e)
         {
             var torlendo = new List<Control>();
-            foreach (Control c in Controls) if (c != exit && c != btnJelentesek) torlendo.Add(c);
+            foreach (Control c in Controls) if (c != exit && c != btnJelentesek && c != btnVisszaFoglalashoz) torlendo.Add(c);
             foreach (var c in torlendo) Controls.Remove(c);
 
             tlpJelentes = new TableLayoutPanel();
@@ -484,6 +474,17 @@ namespace SanctumVitae{
             tlpJelentes.Padding = new Padding(8, 0, 8, 8);
 
             Controls.Add(tlpJelentes);
+            btnVisszaFoglalashoz = new Button();
+            btnVisszaFoglalashoz.Text = "Vissza";
+            btnVisszaFoglalashoz.Width = 90;
+            btnVisszaFoglalashoz.Height = 23;
+            btnVisszaFoglalashoz.Location = btnJelentesek.Location;
+            btnVisszaFoglalashoz.ForeColor = Color.White;
+            btnVisszaFoglalashoz.BackColor = Color.DarkRed;
+            btnVisszaFoglalashoz.FlatStyle = FlatStyle.Flat;
+            btnVisszaFoglalashoz.Click += BtnVisszaFoglalashoz_Click;
+
+            Controls.Add(btnVisszaFoglalashoz);
 
             var top = new TableLayoutPanel();
             top.Dock = DockStyle.Fill;
@@ -608,6 +609,24 @@ namespace SanctumVitae{
 
             FrissitBeviteliLathatosag();
             grid.Visible = false;
+            btnJelentesek.Visible = false;
+            btnVisszaFoglalashoz.BringToFront();
+        }
+        private void BtnVisszaFoglalashoz_Click(object sender, EventArgs e)
+        {
+            var torol = new List<Control>();
+            foreach (Control c in Controls)
+                if (c != exit && c != btnJelentesek)
+                    torol.Add(c);
+
+            foreach (var c in torol)
+                Controls.Remove(c);
+
+            btnJelentesek.Visible = true;
+
+            Controls.Clear();
+            InitializeComponent();
+            Form1_Load(null, null);
         }
         private void FrissitBeviteliLathatosag()
         {
@@ -700,7 +719,7 @@ namespace SanctumVitae{
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hiba az előnézet betöltésekor: " + ex.Message);
+                Hibauzenet("Hiba az előnézet betöltésekor!", ex);
             }
         }
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -729,7 +748,7 @@ namespace SanctumVitae{
             }
             catch (Exception ex)
             {
-                MessageBox.Show("PDF hiba: " + ex.Message);
+                Hibauzenet("Hiba a PDF létrehozásakor!", ex);
             }
         }
         private void ExportDataTableToPdf(DataTable dt, string cim, string filePath)
@@ -869,6 +888,7 @@ namespace SanctumVitae{
             int agy = int.Parse(parts[2].Substring(0, 2).Trim());
             int potAgy = int.Parse(parts[3].Trim().TrimEnd(')'));
             kivalasztottSzoba = new szoba(szobaId, agy, potAgy);
+            JoE();
         }
         public bool JoE()
         {
@@ -877,10 +897,28 @@ namespace SanctumVitae{
                 if (ctrl is Button && ctrl.Text.Contains("Szoba")) toRemove.Add(ctrl);
             for (int i = 0; i < toRemove.Count; i++) Controls.Remove(toRemove[i]);
             noRoomLabel.Text = "";
-            if (vendegNeve.Text != string.Empty && vendegIrsz.Text != string.Empty && vendegKoztTipusa.Text != string.Empty && vendegTel.Text != string.Empty && int.TryParse(vendegHazszam.Text, out int b) && tolIg != "" && vendegKozteruletNeve.Text != "" && int.TryParse(hanyFo.Text, out int c) && c > 0)
+            bool adatokOk =
+                vendegNeve.Text.Length >= 3 &&
+                vendegIrsz.Text.Length >= 2 &&
+                vendegKoztTipusa.Text.Length >= 2 &&
+                vendegKozteruletNeve.Text.Length >= 2 &&
+                vendegTel.Text.Length >= 6 &&
+                int.TryParse(vendegHazszam.Text, out int haz) &&
+                int.TryParse(hanyFo.Text, out int letszam) && letszam > 0 &&
+                !string.IsNullOrWhiteSpace(tolIg);
+
+            if (adatokOk)
             {
-                foglal.Enabled = true;
-                foglal.BackColor = Color.Green;
+                if (kivalasztottSzoba != null && kivalasztottSzoba.szobaId != -1)
+                {
+                    foglal.Enabled = true;
+                    foglal.BackColor = Color.Green;
+                }
+                else
+                {
+                    foglal.Enabled = false;
+                    foglal.BackColor = Color.Red;
+                }
                 int fo;
                 szabadSzobak.Clear();
                 if (int.TryParse(hanyFo.Text, out fo))
@@ -1008,6 +1046,34 @@ namespace SanctumVitae{
             if (v is int || v is double || v is decimal || v is float)
                 return Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture);
             return $"'{v.ToString().Replace("'", "''")}'";
+        }
+        private void Hibauzenet(string uzenet, Exception ex)
+        {
+            string hibaszoveg = "";
+            if (ex != null)
+                hibaszoveg = ex.Message;
+            else
+                hibaszoveg = "Ismeretlen hiba.";
+
+            MessageBox.Show(
+                uzenet + "\n\nHiba részletei:\n" + hibaszoveg,
+                "Hiba történt",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
+
+            try
+            {
+                string logSor =
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
+                    " - " + uzenet +
+                    " - " + hibaszoveg + "\n";
+
+                System.IO.File.AppendAllText("errors.log", logSor);
+            }
+            catch
+            {
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ INSERT INTO vendegek (vnev, telepules, koztNeve, koztTipusa, hazSz, telefonSz, h
 ('Horváth Krisztina', 'Kecskemét', 'Dózsa György', 'út', '33', '06300001111', 1, FALSE),
 ('Teszt', 'Orgovány', 'Kossuth L', 'utca', '21', '+36702350040', 4, TRUE),
 ('Teszt2', 'Orgovány', 'Kossuth', 'utca', '21', '+36702350040', 5, FALSE),
-('T', 't', 't', 't', '23', '+3', 1, TRUE);
+('T', 't', 't', 't', '23', '+3', 1, FALSE);
 
 INSERT INTO foglalasok (vendeg, szoba, erk, tav, fo, reggeli, teljesEll, fizetve) VALUES
 (1, 1, '2025-10-01 14:00:00', '2025-10-04 10:00:00', 2, TRUE, FALSE, TRUE),
