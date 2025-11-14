@@ -474,7 +474,7 @@ namespace SanctumVitae{
             tlpJelentes.Padding = new Padding(8, 0, 8, 8);
 
             Controls.Add(tlpJelentes);
-            btnVisszaFoglalashoz = new Button();
+            /*btnVisszaFoglalashoz = new Button();
             btnVisszaFoglalashoz.Text = "Vissza";
             btnVisszaFoglalashoz.Width = 90;
             btnVisszaFoglalashoz.Height = 23;
@@ -484,7 +484,7 @@ namespace SanctumVitae{
             btnVisszaFoglalashoz.FlatStyle = FlatStyle.Flat;
             btnVisszaFoglalashoz.Click += BtnVisszaFoglalashoz_Click;
 
-            Controls.Add(btnVisszaFoglalashoz);
+            Controls.Add(btnVisszaFoglalashoz);*/
 
             var top = new TableLayoutPanel();
             top.Dock = DockStyle.Fill;
@@ -609,7 +609,7 @@ namespace SanctumVitae{
 
             FrissitBeviteliLathatosag();
             grid.Visible = false;
-            btnJelentesek.Visible = false;
+            //btnJelentesek.Visible = false;
             btnVisszaFoglalashoz.BringToFront();
         }
         private void BtnVisszaFoglalashoz_Click(object sender, EventArgs e)
