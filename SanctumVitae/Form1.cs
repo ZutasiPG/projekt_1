@@ -1040,12 +1040,19 @@ namespace SanctumVitae{
         }
         private string Format(object v, bool boolAsText)
         {
-            if (v == DBNull.Value) return "NULL";
-            if (v is bool b) return boolAsText ? (b ? "TRUE" : "FALSE") : (b ? "1" : "0");
-            if (v is DateTime d) return $"'{d:yyyy-MM-dd HH:mm:ss}'";
-            if (v is int || v is double || v is decimal || v is float)
-                return Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture);
-            return $"'{v.ToString().Replace("'", "''")}'";
+            try{
+                if (v == DBNull.Value) return "NULL";
+                if (v is bool b) return boolAsText ? (b ? "TRUE" : "FALSE") : (b ? "1" : "0");
+                if (v is DateTime d) return $"'{d:yyyy-MM-dd HH:mm:ss}'";
+                if (v is int || v is double || v is decimal || v is float)
+                    return Convert.ToString(v);
+                return $"'{v.ToString().Replace("'", "''")}'";
+            }
+            catch (Exception e)
+            {
+                Hibauzenet("Hiba az érték formázásakor!", e);
+                return "NULL";
+            }
         }
         private void Hibauzenet(string uzenet, Exception ex)
         {
